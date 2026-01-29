@@ -24,6 +24,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // 1. THE PRODUCTION FIX (Allow 10MB Uploads)
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '10mb',
+    },
+  },
+  // 2. THE ASSET PIPELINE
   images: {
     remotePatterns: [
       {

@@ -517,6 +517,8 @@ import { AcademicYear } from "@/types/schema";
 import { Metadata } from "next";
 import React from "react";
 import { SupabaseClient } from "@supabase/supabase-js";
+import { desc } from "framer-motion/client";
+import { create } from "domain";
 // --- 1. THE LATEST ORIGINAL ---
 export async function getLatestOriginal(): Promise<Play | null> {
   const supabase = await createClient();
@@ -959,11 +961,27 @@ export async function getActiveChallenge() {
 export async function getEvents() {
   const supabase = await createClient();
   
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('events')
-    .select('*')
+    .select(`
+      id,
+      title,
+      slug,
+      date,
+      type,
+      location,
+      description,
+      poster_url,
+      featured_image_url,
+      registration_link,
+      created_at
+      `)
     .is('deleted_at', null)
     .order('date', { ascending: false }); // Fetch all, we sort in UI
 
-  return data || [];
+  if (error) {
+    console.warn("Brain Warning: Could not fetch events.", error);
+    return [];
+  }
+  return ( data as any[]) || [];
 }
