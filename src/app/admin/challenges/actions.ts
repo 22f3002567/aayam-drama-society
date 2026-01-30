@@ -330,6 +330,105 @@
 // }
 
 
+// "use server";
+
+// import { createAdminClient } from "@/lib/supabase/admin";
+// import { revalidatePath } from "next/cache";
+
+// // --- 1. INTELLIGENCE (Slug Generator) ---
+// async function generateUniqueSlug(supabase: any, theme: string) {
+//   let baseSlug = theme.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+//   const yearSlug = `${baseSlug}-${new Date().getFullYear()}`;
+  
+//   const { data } = await supabase.from('challenges').select('slug').eq('slug', yearSlug).maybeSingle();
+//   return data ? `${yearSlug}-${Date.now()}` : yearSlug;
+// }
+
+// // --- 2. BROADCAST (New Signal) ---
+// export async function broadcastSignal(formData: FormData) {
+//   const supabase = createAdminClient();
+//   const theme = formData.get("theme") as string;
+//   const brief = formData.get("brief") as string;
+//   const deadlineStr = formData.get("deadline") as string;
+
+//   if (!theme || !brief || !deadlineStr) return { success: false, error: "Missing Frequency Data." };
+  
+//   const deadline = new Date(deadlineStr);
+//   if (deadline < new Date()) return { success: false, error: "Cannot broadcast to the past." };
+
+//   try {
+//     // A. Archive Active
+//     const { data: current } = await supabase.from("challenges").select("id").eq("status", "active").maybeSingle();
+//     if (current) {
+//         await supabase.from("challenges").update({ status: "archived" }).eq("id", current.id);
+//     }
+
+//     // B. Create New
+//     const slug = await generateUniqueSlug(supabase, theme);
+//     const { data: newSignal, error } = await supabase.from("challenges").insert({
+//       theme, slug, brief, deadline: deadline.toISOString(), status: "active"
+//     }).select().single();
+
+//     if (error) throw error;
+
+//     // C. Audit
+//     await supabase.from("audit_logs").insert({
+//         action: "BROADCAST", target_table: "challenges", target_id: newSignal.id,
+//         details: `Signal Live: ${theme}`, admin_email: "GOD_MODE_ADMIN"
+//     });
+
+//     revalidatePath("/admin/challenges");
+//     return { success: true };
+//   } catch (err: any) {
+//     return { success: false, error: err.message };
+//   }
+// }
+
+// // --- 3. HOTFIX (Update Active Signal) --- <--- NEW SUPERPOWER
+// export async function updateSignal(formData: FormData) {
+//   const supabase = createAdminClient();
+//   const id = formData.get("id") as string;
+//   const theme = formData.get("theme") as string;
+//   const brief = formData.get("brief") as string;
+//   const deadlineStr = formData.get("deadline") as string;
+
+//   try {
+//     const { error } = await supabase.from("challenges").update({
+//       theme, brief, deadline: new Date(deadlineStr).toISOString()
+//     }).eq("id", id);
+
+//     if (error) throw error;
+
+//     await supabase.from("audit_logs").insert({
+//         action: "UPDATE_SIGNAL", target_table: "challenges", target_id: id,
+//         details: `Hotfix applied to: ${theme}`, admin_email: "GOD_MODE_ADMIN"
+//     });
+
+//     revalidatePath("/admin/challenges");
+//     return { success: true };
+//   } catch (err: any) {
+//     return { success: false, error: err.message };
+//   }
+// }
+
+// // --- 4. KILL SWITCH ---
+// export async function killSignal(id: string) {
+//   const supabase = createAdminClient();
+//   try {
+//     await supabase.from("challenges").update({ status: "closed" }).eq("id", id);
+    
+//     await supabase.from("audit_logs").insert({
+//         action: "KILL_SIGNAL", target_table: "challenges", target_id: id,
+//         details: "Emergency Cutoff.", admin_email: "GOD_MODE_ADMIN"
+//     });
+
+//     revalidatePath("/admin/challenges");
+//     return { success: true };
+//   } catch (err: any) {
+//     return { success: false, error: err.message };
+//   }
+// }
+
 "use server";
 
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -337,7 +436,9 @@ import { revalidatePath } from "next/cache";
 
 // --- 1. INTELLIGENCE (Slug Generator) ---
 async function generateUniqueSlug(supabase: any, theme: string) {
-  let baseSlug = theme.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+  let baseSlug = theme.toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)+/g, '');
   const yearSlug = `${baseSlug}-${new Date().getFullYear()}`;
   
   const { data } = await supabase.from('challenges').select('slug').eq('slug', yearSlug).maybeSingle();
