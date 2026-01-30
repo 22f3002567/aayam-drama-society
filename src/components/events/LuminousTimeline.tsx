@@ -2823,8 +2823,8 @@ const EventNode = ({ event, isPast, index }: { event: EventItem, isPast: boolean
 
     // --- FIX: SELECT THE IMAGE SOURCE ---
     // We prioritize the Poster URL, then fall back to Featured Image
-    const imageSrc = event.poster_url || event.featured_image_url;
-
+    // const imageSrc = event.poster_url || event.featured_image_url;
+    const imageSrc = event.featured_image_url || event.poster_url;
     const smoothOpacity = useSpring(useTransform(scrollYProgress, [0, 1], [0.3, 1]), { stiffness: 50, damping: 20 });
     const smoothScale = useSpring(useTransform(scrollYProgress, [0, 1], [0.95, 1]), { stiffness: 50, damping: 20 });
 

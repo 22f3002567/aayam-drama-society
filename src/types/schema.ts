@@ -240,3 +240,24 @@ export interface Challenge {
   deadline: string; // ISO Timestamp string
   status: ChallengeStatus;
 }
+
+// ... existing types
+
+// 4. THE TRANSMISSION (Submission)
+export type SubmissionStatus = 'pending' | 'reviewing' | 'selected' | 'rejected';
+
+export interface Submission {
+  id: string;
+  created_at: string;
+  challenge_id: string;
+  // Joins
+  challenges?: { theme: string; slug: string };
+  
+  type: string; // 'monologue', 'script', 'design'
+  name: string;
+  contact_info: string; // Email or Phone
+  content: string; // The text submission or description
+  portfolio_link: string | null; // URL to video/drive
+  
+  status: SubmissionStatus;
+}

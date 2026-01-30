@@ -1,0 +1,257 @@
+// "use client";
+
+// import { useState } from "react";
+// import { RadioTower, PowerOff, Zap, Activity, Clock, AlertTriangle } from "lucide-react";
+// import { broadcastSignal, killSignal } from "@/app/admin/signals/actions";
+
+// export default function SignalConsole({ activeSignal }: { activeSignal: any }) {
+//   const [isTransmitting, setIsTransmitting] = useState(false);
+
+//   const handleBroadcast = async (e: React.FormEvent<HTMLFormElement>) => {
+//     e.preventDefault();
+//     setIsTransmitting(true);
+    
+//     const formData = new FormData(e.currentTarget);
+//     const result = await broadcastSignal(formData);
+    
+//     setIsTransmitting(false);
+    
+//     if (!result.success) {
+//         alert(result.error);
+//     } else {
+//       // Success: Reset the form
+//       (e.target as HTMLFormElement).reset();
+//     }
+//   };
+
+//   const handleKill = async () => {
+//     if(!activeSignal) return;
+//     const confirmed = confirm("WARNING: This will sever the connection immediately. Participants will no longer be able to submit. Proceed?");
+//     if(confirmed) {
+//         await killSignal(activeSignal.id);
+//     }
+//   };
+
+//   return (
+//     <div className="space-y-12">
+      
+//       {/* 1. THE MONITOR (Active State) */}
+//       <div className={`relative overflow-hidden p-8 rounded-2xl border transition-all duration-700 ${activeSignal ? 'bg-red-950/20 border-red-500/50 shadow-[0_0_60px_rgba(220,38,38,0.15)]' : 'bg-[#0a0a0a] border-white/10'}`}>
+         
+//          {/* Grain Overlay */}
+//          {activeSignal && (
+//              <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 animate-grain pointer-events-none mix-blend-overlay" />
+//          )}
+
+//          {activeSignal ? (
+//             <div className="relative z-10 flex flex-col md:flex-row justify-between items-start gap-8">
+//                <div className="flex-1">
+//                   <div className="flex items-center gap-4 mb-6">
+//                      <span className="flex items-center gap-2 px-3 py-1 bg-red-500/10 border border-red-500/20 rounded-full text-red-500 font-mono text-[10px] uppercase tracking-widest animate-pulse shadow-[0_0_10px_rgba(220,38,38,0.2)]">
+//                         <span className="w-1.5 h-1.5 bg-red-500 rounded-full shadow-[0_0_5px_currentColor]" /> Live Broadcast
+//                      </span>
+//                      <span className="flex items-center gap-2 text-white/40 font-mono text-[10px] uppercase tracking-widest">
+//                         <Clock className="w-3 h-3" /> Ends: {new Date(activeSignal.deadline).toLocaleString()}
+//                      </span>
+//                   </div>
+                  
+//                   <h2 className="text-4xl md:text-6xl font-serif text-white mb-6 tracking-tight drop-shadow-lg">{activeSignal.theme}</h2>
+                  
+//                   <div className="relative pl-6 border-l-2 border-red-500/30">
+//                       <p className="text-red-100/70 text-sm md:text-base leading-relaxed italic">
+//                         "{activeSignal.brief}"
+//                       </p>
+//                   </div>
+//                </div>
+               
+//                {/* Kill Switch */}
+//                <button onClick={handleKill} className="group flex items-center gap-3 px-6 py-4 bg-red-500/10 border border-red-500/30 text-red-500 rounded-xl hover:bg-red-600 hover:text-white transition-all shadow-lg hover:shadow-red-900/40">
+//                   <PowerOff className="w-5 h-5 group-hover:scale-110 transition-transform" /> 
+//                   <span className="text-xs font-mono uppercase tracking-widest font-bold">Kill Signal</span>
+//                </button>
+//             </div>
+//          ) : (
+//             // Silent State
+//             <div className="text-center py-16 flex flex-col items-center gap-6">
+//                <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center border border-white/10 shadow-inner">
+//                     <RadioTower className="w-10 h-10 text-white/20" />
+//                </div>
+//                <div>
+//                    <h3 className="text-white/40 font-serif text-2xl mb-2">Silence on all frequencies</h3>
+//                    <p className="font-mono text-xs text-white/20 uppercase tracking-widest">Waiting for transmission...</p>
+//                </div>
+//             </div>
+//          )}
+//       </div>
+
+//       {/* 2. THE TRANSMITTER (Form) */}
+//       <div className="bg-[#0a0a0a] border border-white/10 rounded-2xl overflow-hidden relative group">
+//          {/* Decoration Line */}
+//          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+         
+//          <div className="p-8 border-b border-white/5 bg-white/[0.02]">
+//             <h3 className="text-xl font-serif text-white flex items-center gap-3">
+//                 <Activity className="w-5 h-5 text-gold-500" />
+//                 Initialize Broadcast
+//             </h3>
+//          </div>
+         
+//          <form onSubmit={handleBroadcast} className="p-8 space-y-8">
+//             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+//                <div className="space-y-3">
+//                   <label className="text-[10px] font-mono text-white/40 uppercase tracking-widest flex items-center gap-2">
+//                       Target Frequency (Theme)
+//                   </label>
+//                   <input name="theme" required placeholder="e.g. ECHOES IN THE DARK" className="w-full bg-black border border-white/10 rounded-lg p-4 text-white placeholder:text-white/20 focus:border-gold-500 focus:outline-none transition-all font-serif text-lg tracking-wide" />
+//                </div>
+//                <div className="space-y-3">
+//                   <label className="text-[10px] font-mono text-white/40 uppercase tracking-widest flex items-center gap-2">
+//                       Transmission Cutoff (Deadline)
+//                   </label>
+//                   <input name="deadline" type="datetime-local" required className="w-full bg-black border border-white/10 rounded-lg p-4 text-white text-sm focus:border-gold-500 focus:outline-none transition-all font-mono" />
+//                </div>
+//             </div>
+            
+//             <div className="space-y-3">
+//                <label className="text-[10px] font-mono text-white/40 uppercase tracking-widest flex items-center gap-2">
+//                    Directive (Brief)
+//                </label>
+//                <textarea name="brief" required rows={4} placeholder="Detailed instructions for the society..." className="w-full bg-black border border-white/10 rounded-lg p-4 text-white text-sm focus:border-gold-500 focus:outline-none transition-all resize-none leading-relaxed" />
+//             </div>
+
+//             <div className="pt-4 flex justify-end">
+//                 <button disabled={isTransmitting} className="w-full md:w-auto px-10 py-4 bg-white text-black font-bold uppercase tracking-widest text-xs rounded-lg hover:bg-gold-500 transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(234,179,8,0.4)]">
+//                    {isTransmitting ? (
+//                        <span className="animate-pulse flex items-center gap-2">
+//                           <Zap className="w-4 h-4" /> Modulating...
+//                        </span>
+//                    ) : (
+//                        <>
+//                         <Zap className="w-4 h-4 fill-current" /> Transmit Signal
+//                        </>
+//                    )}
+//                 </button>
+//             </div>
+//          </form>
+//       </div>
+
+//     </div>
+//   );
+// }
+
+"use client";
+
+import { useState } from "react";
+import { RadioTower, PowerOff, Zap, Activity, Clock } from "lucide-react";
+import { broadcastSignal, killSignal } from "@/app/admin/challenges/actions"; // Correct Import
+
+export default function SignalConsole({ activeSignal }: { activeSignal: any }) {
+  const [isTransmitting, setIsTransmitting] = useState(false);
+
+  const handleBroadcast = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsTransmitting(true);
+    
+    const formData = new FormData(e.currentTarget);
+    const result = await broadcastSignal(formData);
+    
+    setIsTransmitting(false);
+    
+    if (!result.success) {
+        alert(result.error);
+    } else {
+      (e.target as HTMLFormElement).reset();
+    }
+  };
+
+  const handleKill = async () => {
+    if(!activeSignal) return;
+    if(confirm("WARNING: This will sever the connection immediately. Proceed?")) {
+        await killSignal(activeSignal.id);
+    }
+  };
+
+  return (
+    <div className="space-y-12">
+      
+      {/* 1. MONITOR */}
+      <div className={`relative overflow-hidden p-8 rounded-2xl border transition-all duration-700 ${activeSignal ? 'bg-red-950/20 border-red-500/50 shadow-[0_0_60px_rgba(220,38,38,0.15)]' : 'bg-[#0a0a0a] border-white/10'}`}>
+         
+         {activeSignal && <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 animate-grain pointer-events-none mix-blend-overlay" />}
+
+         {activeSignal ? (
+            <div className="relative z-10 flex flex-col md:flex-row justify-between items-start gap-8">
+               <div className="flex-1">
+                  <div className="flex items-center gap-4 mb-6">
+                     <span className="flex items-center gap-2 px-3 py-1 bg-red-500/10 border border-red-500/20 rounded-full text-red-500 font-mono text-[10px] uppercase tracking-widest animate-pulse">
+                        <span className="w-1.5 h-1.5 bg-red-500 rounded-full shadow-[0_0_5px_currentColor]" /> Live Broadcast
+                     </span>
+                     <span className="flex items-center gap-2 text-white/40 font-mono text-[10px] uppercase tracking-widest">
+                        <Clock className="w-3 h-3" /> Ends: {new Date(activeSignal.deadline).toLocaleString()}
+                     </span>
+                  </div>
+                  <h2 className="text-4xl md:text-6xl font-serif text-white mb-6 tracking-tight drop-shadow-lg">{activeSignal.theme}</h2>
+                  <div className="relative pl-6 border-l-2 border-red-500/30">
+                      <p className="text-red-100/70 text-sm md:text-base leading-relaxed italic">"{activeSignal.brief}"</p>
+                  </div>
+               </div>
+               <button onClick={handleKill} className="group flex items-center gap-3 px-6 py-4 bg-red-500/10 border border-red-500/30 text-red-500 rounded-xl hover:bg-red-600 hover:text-white transition-all shadow-lg hover:shadow-red-900/40">
+                  <PowerOff className="w-5 h-5 group-hover:scale-110 transition-transform" /> 
+                  <span className="text-xs font-mono uppercase tracking-widest font-bold">Kill Signal</span>
+               </button>
+            </div>
+         ) : (
+            <div className="text-center py-16 flex flex-col items-center gap-6">
+               <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center border border-white/10 shadow-inner">
+                    <RadioTower className="w-10 h-10 text-white/20" />
+               </div>
+               <div>
+                   <h3 className="text-white/40 font-serif text-2xl mb-2">Silence on all frequencies</h3>
+                   <p className="font-mono text-xs text-white/20 uppercase tracking-widest">Waiting for transmission...</p>
+               </div>
+            </div>
+         )}
+      </div>
+
+      {/* 2. TRANSMITTER */}
+      <div className="bg-[#0a0a0a] border border-white/10 rounded-2xl overflow-hidden relative group">
+         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+         
+         <div className="p-8 border-b border-white/5 bg-white/[0.02]">
+            <h3 className="text-xl font-serif text-white flex items-center gap-3">
+                <Activity className="w-5 h-5 text-gold-500" />
+                Initialize Broadcast
+            </h3>
+         </div>
+         
+         <form onSubmit={handleBroadcast} className="p-8 space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+               <div className="space-y-3">
+                  <label className="text-[10px] font-mono text-white/40 uppercase tracking-widest flex items-center gap-2">Target Frequency (Theme)</label>
+                  <input name="theme" required placeholder="e.g. ECHOES IN THE DARK" className="w-full bg-black border border-white/10 rounded-lg p-4 text-white placeholder:text-white/20 focus:border-gold-500 focus:outline-none transition-all font-serif text-lg tracking-wide" />
+               </div>
+               <div className="space-y-3">
+                  <label className="text-[10px] font-mono text-white/40 uppercase tracking-widest flex items-center gap-2">Transmission Cutoff (Deadline)</label>
+                  <input name="deadline" type="datetime-local" required className="w-full bg-black border border-white/10 rounded-lg p-4 text-white text-sm focus:border-gold-500 focus:outline-none transition-all font-mono" />
+               </div>
+            </div>
+            
+            <div className="space-y-3">
+               <label className="text-[10px] font-mono text-white/40 uppercase tracking-widest flex items-center gap-2">Directive (Brief)</label>
+               <textarea name="brief" required rows={4} placeholder="Detailed instructions..." className="w-full bg-black border border-white/10 rounded-lg p-4 text-white text-sm focus:border-gold-500 focus:outline-none transition-all resize-none leading-relaxed" />
+            </div>
+
+            <div className="pt-4 flex justify-end">
+                <button disabled={isTransmitting} className="w-full md:w-auto px-10 py-4 bg-white text-black font-bold uppercase tracking-widest text-xs rounded-lg hover:bg-gold-500 transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(234,179,8,0.4)]">
+                   {isTransmitting ? (
+                       <span className="animate-pulse flex items-center gap-2"><Zap className="w-4 h-4" /> Modulating...</span>
+                   ) : (
+                       <><Zap className="w-4 h-4 fill-current" /> Transmit Signal</>
+                   )}
+                </button>
+            </div>
+         </form>
+      </div>
+    </div>
+  );
+}
