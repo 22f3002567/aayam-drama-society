@@ -42,7 +42,7 @@ const nextConfig: NextConfig = {
       // You likely need this for your Supabase posters too, if not already there:
       {
         protocol: "https",
-        hostname: "vwhlmbzazksaqwyyxorr.supabase.co", // Replace with YOUR actual Supabase project URL
+        hostname: "thmmztqjrhuzvuoyknae.supabase.co", // Replace with YOUR actual Supabase project URL
         port: "",
         pathname: "/**",
       },
@@ -50,6 +50,14 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "images.unsplash.com",
       },
+      {
+        protocol: "https",
+        hostname: "unsplash.com", // <--- ADD THIS (The Safety Net)
+      },
+      {
+        protocol: "https",
+        hostname: "drive.google.com", // <--- ADD THIS (For Sanity-hosted images)
+      }
     ],
   },
 };

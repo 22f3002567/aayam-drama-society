@@ -21,7 +21,8 @@ const NAV_ITEMS = [
   { label: "Originals", path: "/admin/plays", icon: FileText },    
   { label: "Roster", path: "/admin/members", icon: Users },        
   { label: "The Forge", path: "/admin/forge", icon: Award },       
-  { label: "Signals", path: "/admin/challenges", icon: Activity }, 
+  { label: "Signals", path: "/admin/challenges", icon: Activity },
+  { label: "Signals", path: "/admin/signals", icon: Activity }, // Ensure this points to /admin/signals
 ];
 
 export default function NexusLayout({ children }: { children: ReactNode }) {

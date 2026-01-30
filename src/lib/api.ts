@@ -519,6 +519,7 @@ import React from "react";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { desc } from "framer-motion/client";
 import { create } from "domain";
+import { EventItem } from "@/types/schema";
 // --- 1. THE LATEST ORIGINAL ---
 export async function getLatestOriginal(): Promise<Play | null> {
   const supabase = await createClient();
@@ -958,7 +959,7 @@ export async function getActiveChallenge() {
 }
 
 // B. Get The Timeline (All Events)
-export async function getEvents() {
+export async function getEvents(): Promise<EventItem[]> {
   const supabase = await createClient();
   
   const { data, error } = await supabase
@@ -971,8 +972,8 @@ export async function getEvents() {
       type,
       location,
       description,
-      poster_url,
       featured_image_url,
+      poster_url,
       registration_link,
       created_at
       `)
