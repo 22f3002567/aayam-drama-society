@@ -2607,7 +2607,7 @@ export async function getLatestOriginal(client?: SupabaseClient): Promise<Play |
       .select('*')
       .is('deleted_at', null)
       // 1. GRAVITY CONTROL: HIGH scores float to the top
-      .order('release_date', { ascending: false })
+      .order('featured_score', { ascending: false })
       //2. CHRONOLOGY: If scores are equal (e.g. both 0), show newest
       .order('release_date', { ascending: false })
       .limit(1)
