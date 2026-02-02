@@ -1,42 +1,73 @@
+// // // // // import { createAdminClient } from "@/lib/supabase/admin";
+// // // // // import ChallengeList from "@/components/admin/pulse/ChallengeList";
+// // // // // import PulseToolbar from "@/components/admin/pulse/PulseToolbar";
+
+// // // // // export default async function PulseManager() {
+// // // // //   const supabase = createAdminClient();
+  
+// // // // //   // FETCH ALL (Including Deleted)
+// // // // //   const { data: challenges } = await supabase
+// // // // //     .from('challenges')
+// // // // //     .select('*')
+// // // // //     .order('deadline', { ascending: false });
+
+// // // // //   return (
+// // // // //     <div className="space-y-8">
+// // // // //       {/* HEADER */}
+// // // // //       <div className="flex justify-between items-end border-b border-white/5 pb-6">
+// // // // //         <div>
+// // // // //           <h1 className="text-4xl font-serif text-white mb-2">The Pulse</h1>
+// // // // //           <p className="font-mono text-xs text-white/40 uppercase tracking-widest">
+// // // // //             Signal & Challenge Control
+// // // // //           </p>
+// // // // //         </div>
+// // // // //         <PulseToolbar />
+// // // // //       </div>
+
+// // // // //       {/* LIST */}
+// // // // //       <ChallengeList challenges={challenges || []} />
+// // // // //     </div>
+// // // // //   );
+// // // // // }
+
 // // // // import { createAdminClient } from "@/lib/supabase/admin";
-// // // // import ChallengeList from "@/components/admin/pulse/ChallengeList";
-// // // // import PulseToolbar from "@/components/admin/pulse/PulseToolbar";
+// // // // import SignalConsole from "@/components/admin/pulse/SignalConsole"; // Correct Import
+// // // // import { RadioTower } from "lucide-react";
 
 // // // // export default async function PulseManager() {
 // // // //   const supabase = createAdminClient();
   
-// // // //   // FETCH ALL (Including Deleted)
-// // // //   const { data: challenges } = await supabase
-// // // //     .from('challenges')
-// // // //     .select('*')
-// // // //     .order('deadline', { ascending: false });
+// // // //   const { data: activeSignal } = await supabase
+// // // //     .from("challenges")
+// // // //     .select("*")
+// // // //     .eq("status", "active")
+// // // //     .maybeSingle();
 
 // // // //   return (
-// // // //     <div className="space-y-8">
-// // // //       {/* HEADER */}
-// // // //       <div className="flex justify-between items-end border-b border-white/5 pb-6">
-// // // //         <div>
-// // // //           <h1 className="text-4xl font-serif text-white mb-2">The Pulse</h1>
-// // // //           <p className="font-mono text-xs text-white/40 uppercase tracking-widest">
-// // // //             Signal & Challenge Control
-// // // //           </p>
-// // // //         </div>
-// // // //         <PulseToolbar />
+// // // //     <div className="max-w-5xl mx-auto space-y-12 pb-20">
+// // // //       <div className="border-b border-white/5 pb-8">
+// // // //         <h1 className="text-4xl md:text-5xl font-serif text-white mb-3 flex items-center gap-4">
+// // // //           <RadioTower className="w-10 h-10 text-red-500" />
+// // // //           Signal Tower
+// // // //         </h1>
+// // // //         <p className="font-mono text-xs text-white/40 uppercase tracking-widest ml-1">
+// // // //           Broadcast Control • The Beacon • Secure Channel
+// // // //         </p>
 // // // //       </div>
 
-// // // //       {/* LIST */}
-// // // //       <ChallengeList challenges={challenges || []} />
+// // // //       <SignalConsole activeSignal={activeSignal} />
 // // // //     </div>
 // // // //   );
 // // // // }
 
 // // // import { createAdminClient } from "@/lib/supabase/admin";
-// // // import SignalConsole from "@/components/admin/pulse/SignalConsole"; // Correct Import
+// // // import SignalConsole from "@/components/admin/pulse/SignalConsole"; 
 // // // import { RadioTower } from "lucide-react";
 
 // // // export default async function PulseManager() {
 // // //   const supabase = createAdminClient();
   
+// // //   // FETCH ACTIVE SIGNAL
 // // //   const { data: activeSignal } = await supabase
 // // //     .from("challenges")
 // // //     .select("*")
@@ -59,23 +90,31 @@
 // // //     </div>
 // // //   );
 // // // }
-
 // // import { createAdminClient } from "@/lib/supabase/admin";
-// // import SignalConsole from "@/components/admin/pulse/SignalConsole"; 
+// // import SignalConsole from "@/components/admin/pulse/SignalConsole";
+// // import SignalHistory from "@/components/admin/pulse/SignalHistory";
 // // import { RadioTower } from "lucide-react";
 
 // // export default async function PulseManager() {
 // //   const supabase = createAdminClient();
   
-// //   // FETCH ACTIVE SIGNAL
+// //   // 1. FETCH ACTIVE
 // //   const { data: activeSignal } = await supabase
 // //     .from("challenges")
 // //     .select("*")
 // //     .eq("status", "active")
 // //     .maybeSingle();
 
+// //   // 2. FETCH HISTORY (Archived/Closed)
+// //   const { data: history } = await supabase
+// //     .from("challenges")
+// //     .select("*")
+// //     .neq("status", "active") // Everything else
+// //     .order("deadline", { ascending: false })
+// //     .limit(10);
+
 // //   return (
-// //     <div className="max-w-5xl mx-auto space-y-12 pb-20">
+// //     <div className="max-w-5xl mx-auto space-y-16 pb-20">
 // //       <div className="border-b border-white/5 pb-8">
 // //         <h1 className="text-4xl md:text-5xl font-serif text-white mb-3 flex items-center gap-4">
 // //           <RadioTower className="w-10 h-10 text-red-500" />
@@ -87,14 +126,17 @@
 // //       </div>
 
 // //       <SignalConsole activeSignal={activeSignal} />
+      
+// //       <SignalHistory history={history || []} />
 // //     </div>
 // //   );
 // // }
+
 // import { createAdminClient } from "@/lib/supabase/admin";
 // import SignalConsole from "@/components/admin/pulse/SignalConsole";
 // import SignalHistory from "@/components/admin/pulse/SignalHistory";
 // import { RadioTower } from "lucide-react";
-
+// import Link from "next/link";
 // export default async function PulseManager() {
 //   const supabase = createAdminClient();
   
@@ -105,11 +147,11 @@
 //     .eq("status", "active")
 //     .maybeSingle();
 
-//   // 2. FETCH HISTORY (Archived/Closed)
+//   // 2. FETCH HISTORY
 //   const { data: history } = await supabase
 //     .from("challenges")
 //     .select("*")
-//     .neq("status", "active") // Everything else
+//     .neq("status", "active")
 //     .order("deadline", { ascending: false })
 //     .limit(10);
 
@@ -135,7 +177,8 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import SignalConsole from "@/components/admin/pulse/SignalConsole";
 import SignalHistory from "@/components/admin/pulse/SignalHistory";
-import { RadioTower } from "lucide-react";
+import { RadioTower, Inbox } from "lucide-react"; // Import Inbox Icon
+import Link from "next/link"; // Import Link
 
 export default async function PulseManager() {
   const supabase = createAdminClient();
@@ -157,14 +200,32 @@ export default async function PulseManager() {
 
   return (
     <div className="max-w-5xl mx-auto space-y-16 pb-20">
-      <div className="border-b border-white/5 pb-8">
-        <h1 className="text-4xl md:text-5xl font-serif text-white mb-3 flex items-center gap-4">
-          <RadioTower className="w-10 h-10 text-red-500" />
-          Signal Tower
-        </h1>
-        <p className="font-mono text-xs text-white/40 uppercase tracking-widest ml-1">
-          Broadcast Control • The Beacon • Secure Channel
-        </p>
+      
+      {/* HEADER: NOW WITH NAVIGATION */}
+      <div className="border-b border-white/5 pb-8 flex justify-between items-end">
+        <div>
+            <h1 className="text-4xl md:text-5xl font-serif text-white mb-3 flex items-center gap-4">
+                <RadioTower className="w-10 h-10 text-red-500" />
+                Signal Tower
+            </h1>
+            <p className="font-mono text-xs text-white/40 uppercase tracking-widest ml-1">
+                Broadcast Control • The Beacon • Secure Channel
+            </p>
+        </div>
+
+        {/* THE RECEIVER LINK */}
+        <Link 
+            href="/admin/inbox" 
+            className="group flex items-center gap-3 bg-white/5 border border-white/10 px-5 py-3 rounded-lg hover:bg-white/10 hover:border-gold-500/50 transition-all"
+        >
+            <div className="text-right hidden md:block">
+                <div className="text-xs font-bold text-white group-hover:text-gold-500 transition-colors">ACCESS RECEIVER</div>
+                <div className="text-[9px] font-mono text-white/40 uppercase tracking-widest">Incoming Transmissions</div>
+            </div>
+            <div className="p-2 bg-white/5 rounded-full group-hover:bg-gold-500/10 transition-colors">
+                <Inbox className="w-5 h-5 text-gold-500" />
+            </div>
+        </Link>
       </div>
 
       <SignalConsole activeSignal={activeSignal} />

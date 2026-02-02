@@ -7,7 +7,7 @@ import { upsertChallenge } from "@/app/admin/challenges/actions";
 
 interface ChallengeSheetProps {
   isOpen: boolean;
-  onClose: () => void;
+  onClose: () => void
   initialData?: any | null;
 }
 
