@@ -18,11 +18,11 @@ import {
 const NAV_ITEMS = [
   { label: "Bridge", path: "/admin/dashboard", icon: LayoutDashboard },
   { label: "Chronicle", path: "/admin/events", icon: Calendar },   
-  { label: "Originals", path: "/admin/plays", icon: FileText },    
+  { label: "Originals", path: "/admin/originals", icon: FileText },    
   { label: "Roster", path: "/admin/members", icon: Users },        
-  { label: "The Forge", path: "/admin/forge", icon: Award },       
+  { label: "The Forge", path: "/admin/certificates", icon: Award },       
   { label: "Signals", path: "/admin/challenges", icon: Activity },
-  { label: "Signals", path: "/admin/signals", icon: Activity }, // Ensure this points to /admin/signals
+   
 ];
 
 export default function NexusLayout({ children }: { children: ReactNode }) {

@@ -622,3 +622,22 @@ export interface Submission {
   created_at: string;
   status: SubmissionStatus;
 }
+
+
+
+// 9. THE LEGACY (Certificates)
+export interface Certificate {
+  id: string; // The Public ID (e.g. AYM-2026-X92) - PRIMARY KEY
+  created_at: string;
+  recipient_name: string;
+  award_title: string;
+  event_name: string;
+  play_id?: string | null; // Optional link to a specific Play
+  verification_hash: string; // The Invisible Seal
+  
+  // Joins (if we fetch play details)
+  play?: {
+    title: string;
+    slug: string;
+  };
+}
