@@ -2182,7 +2182,7 @@ const getSocialIcon = (platform: string) => {
 
 // --- 2. TYPES & LOGIC ---
 interface TimelineItem {
-    type: 'tenure' | 'credit';
+    type: 'tenure' | 'credit' | 'legacy';
     year: string;
     title: string;
     subtitle: string;
@@ -2264,6 +2264,20 @@ export default function ProfileArchitect({ member }: { member: MemberProfile }) 
             slug: c.play.slug
         });
     });
+    // C. LEGACY CREDITS (The Missing Link)
+    member.legacy_titles?.forEach(t => {
+        // Attempt to extract a year (e.g. "Creative Head 2024")
+        const yearMatch = t.match(/\b(20\d{2})\b/);
+        const extractedYear = yearMatch ? yearMatch[0] : "—";
+        
+        list.push({
+            type: 'legacy',
+            year: extractedYear,
+            title: t,
+            subtitle: 'Special Contribution',
+            isCurrent: false
+        });
+    });
 
     // C. Chronological Sort (Newest First)
     return list.sort((a, b) => parseInt(b.year) - parseInt(a.year));
@@ -2285,13 +2299,14 @@ export default function ProfileArchitect({ member }: { member: MemberProfile }) 
 
       {/* LAYER 1: NAVIGATION */}
       <nav 
-        className={`fixed top-0 left-0 w-full p-6 md:p-8 z-50 flex justify-between items-center transition-all duration-500 ${isScrolled ? 'bg-black/80 backdrop-blur-xl border-b border-white/5' : 'bg-transparent'}`}
-      >
-        <Link href="/ensemble" className="group flex items-center gap-4 text-xs md:text-sm uppercase tracking-[0.2em] text-white/70 hover:text-white transition-colors">
+        // className={`fixed top-0 left-0 w-full p-6 md:p-8 z-50 flex justify-between items-center transition-all duration-500 ${isScrolled ? 'bg-black/80 backdrop-blur-xl border-b border-white/5' : 'bg-transparent'}`}
+        className={`fixed top-0 left-0 w-full p-6 md:p-8 z-50 flex justify-end items-center transition-all duration-500 ${isScrolled ? 'bg-black/80 backdrop-blur-xl border-b border-white/5' : 'bg-transparent'}`}
+      > 
+        <Link href="/artist" className="group flex items-center gap-4 text-xs md:text-sm uppercase tracking-[0.2em] text-white/70 hover:text-white transition-colors">
             <span className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center group-hover:border-white group-hover:bg-white group-hover:text-black transition-all duration-300">
                 <ArrowLeft />
             </span>
-            <span className="hidden md:inline group-hover:translate-x-1 transition-transform">The Lineage</span>
+            <span className="hidden md:inline group-hover:translate-x-1 transition-transform">The Artist</span>
         </Link>
         <div className="flex gap-3">
             {member.social_links && Object.entries(member.social_links).map(([platform, url]: [string, any]) => (
@@ -2349,16 +2364,25 @@ export default function ProfileArchitect({ member }: { member: MemberProfile }) 
       >
           <div className="flex flex-col lg:flex-row gap-20 lg:gap-32 items-start">
               
-              {/* LEFT: ARTIST STATEMENT (Editorial) */}
+              {/* LEFT: ARTIST STATEMENT (Editorial) (Logic Fixed) */}
               <div className="w-full lg:w-3/5">
                   <motion.div variants={FADE_UP} className="relative">
                       <span className="text-[12rem] leading-none font-serif text-white/5 absolute -top-24 -left-12 select-none">“</span>
                       {(() => {
-                        const bioText = member.bio || "An artist of the Aayam Ensemble.";
-                        const splitIndex = bioText.indexOf('.') + 1 || bioText.indexOf('\n') + 1 || bioText.length;
-                        const headline = bioText.slice(0, splitIndex);
-                        const body = bioText.slice(splitIndex);
-
+                        // Fix: Prioritizing short bio for headline
+                        let headline = "";
+                        let body = "";
+                        if (member.short_bio){
+                            // if short_bio exists, it takes the stage.
+                            headline = member.short_bio;
+                            body = member.bio || "";
+                        } else {
+                            // Fallback: Split the Bio
+                            const bioText = member.bio || "An artist of the Aayam Ensemble.";
+                            const splitIndex = bioText.indexOf('.') + 1 || bioText.indexOf('\n') + 1 || bioText.length;
+                            headline = bioText.slice(0, splitIndex);
+                            body = bioText.slice(splitIndex);
+                        }
                         return (
                             <div>
                                 <h2 className="text-3xl md:text-5xl font-serif text-white leading-[1.1] mb-8 relative z-10">{headline}</h2>

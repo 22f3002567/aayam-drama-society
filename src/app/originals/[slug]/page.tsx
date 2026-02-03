@@ -52,9 +52,9 @@ export default async function PlayPage({
           
           {/* NAVIGATION */}
           <div className="w-full flex justify-between items-center mb-16 border-b border-white/5 pb-6">
-            <Link href="/" className="group flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-neutral-500 hover:text-gold-500 transition-colors">
+            <Link href="/originals" className="group flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-neutral-500 hover:text-gold-500 transition-colors">
               <span className="group-hover:-translate-x-1 transition-transform duration-300">←</span>
-              <span>The Stage</span>
+              <span>The Originals</span>
             </Link>
             <div className="flex items-center gap-2">
                 <span className="w-1 h-1 rounded-full bg-red-500 animate-pulse"/>
@@ -112,7 +112,7 @@ export default async function PlayPage({
                )}
              </div>
             {/* CAST ROLL */}
-            <CastRoll credits={play.credits} />
+            <CastRoll credits={play.credits || []}  />
           </div>
 
         </div>

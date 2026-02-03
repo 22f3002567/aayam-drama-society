@@ -481,6 +481,7 @@ export interface EnsembleMember {
   slug: string;
   image_url: string | null;
   bio: string | null;
+  short_bio?: string | null;
   year: string;
   role: string;       
   rank: MemberRank;   
@@ -492,6 +493,7 @@ export interface EnsembleMember {
   voice_note_url?: string | null;
   // social_links: any | null;
   social_links: SocialLinks | null;
+
   email?: string | null;
   
   // Optional Media
@@ -558,6 +560,18 @@ export interface Play {
   tags: string[] | null;
   category: PlayCategory;
   featured_score: number;
+
+  // --- FIX: Add the Cast Join Definition ---
+  credits?: {
+    role_artist: string;
+    team_members: {
+      name: string;
+      slug: string;
+      image_url: string | null;
+      color: string | null;
+    };
+  }[];
+  
 }
 
 // --- 6. EVENTS & CHRONICLE ---

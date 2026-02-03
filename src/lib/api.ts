@@ -3787,6 +3787,7 @@ export async function getMemberProfile(slug: string, client?: SupabaseClient): P
         name: member.name,
         slug: member.slug,
         bio: member.bio,
+        short_bio: member.short_bio,
         image_url: member.image_url,
         voice_note_url: member.voice_note_url,
         color: member.color || '#eab308',
