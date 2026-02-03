@@ -512,7 +512,10 @@ export interface ArtistSummary {
   color: string;
   primary_role: string; // "Secretary"
   roles: string[];      // ["Secretary", "Actor", "Director"]
+  rank: string;  // new // Logic key ; "CROWN" , CLOUD, (For filtering Core)
+  short_bio?: string | null; // The "Elevator Pitch"
   label?: string;       // Legacy support for older components
+  sorting_weight?: number;
 }
 
 // --- 4. THE PROTAGONIST (Detailed Profile) ---

@@ -3671,7 +3671,7 @@ export async function getAllArtists(client?: SupabaseClient): Promise<ArtistSumm
         .from('team_members')
         .select(`
             id, name, slug, image_url, color, legacy_titles, sorting_weight, short_bio, is_hidden,
-            tenures (role_student, is_current, rank), // Added 'rank' fetch
+            tenures (role_student, is_current, rank), 
             credits (role_artist)
         `)
         .is('deleted_at', null)
@@ -3680,23 +3680,32 @@ export async function getAllArtists(client?: SupabaseClient): Promise<ArtistSumm
         .order('name', { ascending: true });
         
 
-    if (error) return [];
+    if (error) {
+      console.error("API Error (getAllArtist):", error);
+      return [];
+
+    } 
 
     const data = rawData as any[];
 
     return (data || [])
         .filter((m: any) => {
             // 1. Stealth protocol: If hidden, vanish.
-            if (m.is_hidden) return false;
+            if (m.is_hidden === true) return false;
 
             // 2. STRICT ISOLATION: If they are Faculty (ZENITH), HIDE THEM.
             // Even if they have other roles, Faculty status makes them invisible here.
+            // we check all tenures. IF they ever held the rank of  ZENITH, they are filtered out of the Artist Grid.
+            // const isFaculty = m.tenures?.some((t: any) => t.rank === 'ZENITH');
+            // if (isFaculty) return false;
+            const currentTenure = m.tenures?.find((t: any) => t.is_current);
+            if (currentTenure?.rank === 'ZENITH') return false;
+
+            return true;
             
-            const isFaculty = m.tenures?.some((t: any) => t.rank === 'ZENITH');
-            if (isFaculty) return false;
 
             // 3. Standard Inclusion Check
-            return true;
+            // // return true;
             // return (
             //     (m.tenures && m.tenures.length > 0) || 
             //     (m.credits && m.credits.length > 0) || 
@@ -3716,14 +3725,18 @@ export async function getAllArtists(client?: SupabaseClient): Promise<ArtistSumm
             // else if (m.tenures?.length > 0) primary = "Alumni";
             // else if (m.credits?.length > 0) primary = "Cast Member";
             let primary = "Member";
+            let rank = "CLOUD"; //NEW ADDED // DEFAULT RANK
             const currentTenure = m.tenures?.find((t: any) => t.is_current);
             
             if (currentTenure) {
                 primary = currentTenure.role_student;
+                rank = currentTenure.rank; // New Added // Capture the rank (CROWN/ORBIT/CLOUD)
             } else if (m.legacy_titles?.length > 0) {
                 primary = m.legacy_titles[0];
+                rank = "ALUMNI"; //NEW ADDED // VIRTUAL RANK FOR ALUMS
             } else if (m.tenures?.length > 0) {
                 primary = "Alumni";
+                rank = "ALUMNI"
             } else if (m.credits?.length > 0) {
                 primary = Array.from(roleSet)[0];
             }
@@ -3735,8 +3748,11 @@ export async function getAllArtists(client?: SupabaseClient): Promise<ArtistSumm
                 image_url: m.image_url,
                 color: m.color || '#eab308',
                 primary_role: primary,
+                label: primary, //New Added // Compatibility
                 roles: Array.from(roleSet),
-                short_bio: m.short_bio // Pass the Intro
+                short_bio: m.short_bio, // Pass the Intro
+                rank: rank,
+                sorting_weight: m.sorting_weight
             };
         });
 }
