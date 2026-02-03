@@ -3676,7 +3676,7 @@ export async function getAllArtists(client?: SupabaseClient): Promise<ArtistSumm
         `)
         .is('deleted_at', null)
         //GOD TIER SORT: First by your Manual Rank (1-99), then Alphabetical
-        .order('sorthing_weight', { ascending: true })
+        .order('sorting_weight', { ascending: true })
         .order('name', { ascending: true });
         
 
