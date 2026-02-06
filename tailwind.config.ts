@@ -176,7 +176,7 @@ const config: Config = {
           '80%': { transform: 'translate(3%, 35%)' },
           '90%': { transform: 'translate(-10%, 10%)' },
         },
-        Scan:{
+        scan:{
           '0%': { transform: 'translateY(-100%)' },
           '100%': { transform: 'translateY(100%)' }, //MOves the beam down full height
         }
