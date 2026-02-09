@@ -76,3 +76,22 @@ export function sanitizeImage(url: string | null | undefined): string | undefine
 
   return url;
 }
+
+/**
+ * THE ARCHITECT'S URL FINDER:
+ * Automatically detects if we are on Localhost, Vercel Preview, or Production.
+ */
+export function getSiteUrl() {
+  let url =
+    process.env.NEXT_PUBLIC_SITE_URL ?? // 1. Production (Set in Vercel)
+    process.env.NEXT_PUBLIC_VERCEL_URL ?? // 2. Vercel Preview (Automatic)
+    "http://localhost:3000"; // 3. Localhost
+
+  // Make sure it has https:// (Vercel variables often miss it)
+  url = url.includes("http") ? url : `https://${url}`;
+  
+  // Remove trailing slash to prevent double slashes
+  url = url.replace(/\/$/, "");
+
+  return url;
+}

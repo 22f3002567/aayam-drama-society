@@ -45,16 +45,20 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
+import { getSiteUrl } from "@/lib/utils";
+
 
 export async function loginWithGoogle() {
   const supabase = await createClient();
-  const origin = (await headers()).get("origin");
+  // const origin = (await headers()).get("origin");
+  const SITE_URL = getSiteUrl();
 
   // 1. GENERATE SECURE URL
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: `${origin}/auth/callback`,
+      // redirectTo: `${origin}/auth/callback`,
+      redirectTo: `${SITE_URL}/auth/callback`,
       queryParams: {
         access_type: 'offline',
         prompt: 'consent',
