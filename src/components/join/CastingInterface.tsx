@@ -167,7 +167,7 @@ const PATHS = [
     description: "You crave the lights. You want to feel the stage beneath your feet. Join us to act, design, and bring stories to life.",
     // image: "https://images.unsplash.com/photo-1514525253440-b393452e8d26?q=80&w=1200", // Stage Light
     image: "/membership.png", // Stage Light
-    link: "https://forms.google.com/member",
+    link: "https://docs.google.com/forms/d/e/1FAIpQLSfe4ADKzs_ZUe6wFYsjEoWpdsaWK-zUjIElk6fuKSvgkQIHLA/viewform?usp=header",
     action: "APPLY FOR MEMBERSHIP"
   },
   {
@@ -177,8 +177,8 @@ const PATHS = [
     sub: "Submit an Idea",
     description: "You have a script in your notes app. A scene in your head. Don't let it fade. Give it to us, and we will build it.",
     // image: "https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200", // Writing
-    image: "/idea",
-    link: "https://forms.google.com/ideas",
+    image: "/idea.jpg", // Writing
+    link: "https://docs.google.com/forms/d/e/1FAIpQLSdXGFkmEQyaKtcZpGPgQIKhnhSMHcl1f4b4JtqYiGOhe2rHAg/viewform?usp=header",
     action: "PITCH YOUR IDEA"
   },
   {
@@ -188,7 +188,7 @@ const PATHS = [
     sub: "Collaborate / Sponsor",
     description: "You see the energy of Aayam Society. You want your Society or House or brand or university to be part of the spectacle. Let's create impact.",
     // image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=1200", // Handshake
-    image: "/collab",
+    image: "/collab.png",
     link: "mailto:drama.society@study.iitm.ac.in",
     action: "START A CONVERSATION"
   },
@@ -199,8 +199,8 @@ const PATHS = [
     sub: "Join Core Team",
     description: "You are an organizer. A leader. You want to build the legacy of Aayam from the inside out.",
     // image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200", // Team
-    image: "/core",
-    link: "https://forms.google.com/core",
+    image: "/core.jpg",
+    link: "https://docs.google.com/forms/d/e/1FAIpQLSdXGFkmEQyaKtcZpGPgQIKhnhSMHcl1f4b4JtqYiGOhe2rHAg/viewform?usp=header",
     action: "VIEW OPEN ROLES"
   }
 ];
@@ -215,7 +215,7 @@ export default function CastingInterface() {
               Come Home to <span className="text-red-500 italic">Aayam.</span>
           </h1>
           <p className="text-white/60 text-lg md:text-xl font-serif leading-relaxed">
-              Whether you are an actor, a writer, a leader, or a friend—there is a place for you here. How do you want to contribute?
+              Whether you are an actor, a writer, a leader, or a friend -there is a place for you here. How do you want to contribute?
           </p>
       </div>
 

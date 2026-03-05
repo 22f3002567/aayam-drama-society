@@ -41,6 +41,9 @@ import TheSigil from "@/components/layout/TheSigil"; // <--- THE EMBLEM
 export const metadata: Metadata = {
   title: "Aayam | Dimensions Unfolding",
   description: "The Dramatics Society of IIT Madras BS Degree.",
+  icons: {
+    icon: "/logo.svg",
+  },
 };
 
 export default function RootLayout({
