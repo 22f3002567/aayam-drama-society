@@ -420,7 +420,7 @@ Most developers delete this history. This codebase keeps it. Because the path is
 
 ## Architect
 
-**Ayush Yadav**
+**Siddharth Sahu**
 Secretary, Aayam Drama Society · IITM BS Degree
 
 This project is a synthesis of disciplines that rarely share the same sentence: asynchronous state management and Bharata Muni's Natyashastra. Graph-network rendering and the psychology of initiation. Cryptographic hash functions and the ceremony of a certificate. Defense-in-depth security architecture and the question of who deserves to be called a member of a community.
