@@ -83,7 +83,7 @@ export default async function EnsemblePage({
   searchParams: Promise<{ year?: string }>;
 }) {
   const params = await searchParams;
-  const currentYear = params.year || '2025-2026'; // Default to current
+  const currentYear = params.year || '2026-2027'; // Default to current
 
   // 2. FETCH DATA BASED ON URL
   const castList = await getEnsemble(currentYear);
