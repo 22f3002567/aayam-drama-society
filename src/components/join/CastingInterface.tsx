@@ -167,7 +167,7 @@ const PATHS = [
     description: "You crave the lights. You want to feel the stage beneath your feet. Join us to act, design, and bring stories to life.",
     // image: "https://images.unsplash.com/photo-1514525253440-b393452e8d26?q=80&w=1200", // Stage Light
     image: "/membership.png", // Stage Light
-    link: "https://docs.google.com/forms/d/e/1FAIpQLSfe4ADKzs_ZUe6wFYsjEoWpdsaWK-zUjIElk6fuKSvgkQIHLA/viewform?usp=header",
+    link: "https://forms.gle/ALggocxPcK3NWStY9",
     action: "APPLY FOR MEMBERSHIP"
   },
   {
@@ -200,7 +200,7 @@ const PATHS = [
     description: "You are an organizer. A leader. You want to build the legacy of Aayam from the inside out.",
     // image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200", // Team
     image: "/core.jpg",
-    link: "https://docs.google.com/forms/d/e/1FAIpQLSdXGFkmEQyaKtcZpGPgQIKhnhSMHcl1f4b4JtqYiGOhe2rHAg/viewform?usp=header",
+    link: "https://forms.gle/e36GYyZ62cvfZsWz8",
     action: "VIEW OPEN ROLES"
   }
 ];
